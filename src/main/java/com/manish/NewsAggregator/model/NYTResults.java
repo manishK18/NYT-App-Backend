@@ -5,8 +5,8 @@ import com.manish.NewsAggregator.util.deserializers.NYTResponseDeserializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonDeserialize(using = NYTResponseDeserializer.class)
 public class NYTResults extends Results{
 }

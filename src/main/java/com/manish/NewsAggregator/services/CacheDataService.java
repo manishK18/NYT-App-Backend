@@ -39,7 +39,6 @@ public class CacheDataService {
 
     public Mono<Results> getCachedDataForQuery(String query, int offset, int limit){
         Results cachedResults = cacheDataRepository.getResultsWithQuery(query, offset, limit);
-        System.out.println("CachedResult:" + cachedResults.toString());
         return Mono.just(cachedResults);
     }
 }

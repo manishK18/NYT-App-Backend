@@ -1,6 +1,5 @@
 package com.manish.NewsAggregator.util.deserializers;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,13 +8,15 @@ import com.manish.NewsAggregator.model.Results;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.UUID;
 
 @Component
 public class NYTResponseDeserializer extends DeserializerFactory{
     @Override
     public Results deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException, JacksonException {
+            throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         Iterator<JsonNode> docsIterator = node.get("response").get("docs").iterator();
         ArrayList<Article> articles = new ArrayList<>();
@@ -42,8 +43,6 @@ public class NYTResponseDeserializer extends DeserializerFactory{
         if (item.hasNonNull("type_of_material")) {
             typeOfMaterial = item.get("type_of_material").asText(null);
         }
-
-
 
         return Article.builder()
                 .id(UUID.randomUUID().toString())

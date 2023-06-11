@@ -9,21 +9,22 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.manish.NewsAggregator.constants.TimeUtils.DATE_TIME_INPUT_PATTERN;
+import static com.manish.NewsAggregator.constants.TimeUtils.DATE_TIME_OUTPUT_PATTERN;
+
 public abstract class DeserializerFactory extends JsonDeserializer<Results> {
-    protected String getFormattedDateTime(String dateTimeText) {
-        if (dateTimeText == null || dateTimeText.isEmpty()) return null;
-        try {
-            String DATE_TIME_INPUT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
-            String DATE_TIME_OUTPUT_PATTERN = "yyyy-MM-dd HH:mm a";
-            SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_INPUT_PATTERN);
-            Date parsedDate = format.parse(dateTimeText);
-            SimpleDateFormat outputFormat = new SimpleDateFormat(DATE_TIME_OUTPUT_PATTERN, Locale.US);
-            outputFormat.setTimeZone(TimeZone.getDefault());
-            if (parsedDate != null) return outputFormat.format(parsedDate);
-            return null;
-        } catch (ParseException ex) {
-            // Log exception
-            return null;
-        }
+  protected String getFormattedDateTime(String dateTimeText) {
+    if (dateTimeText == null || dateTimeText.isEmpty()) return null;
+    try {
+      SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_INPUT_PATTERN);
+      Date parsedDate = format.parse(dateTimeText);
+      SimpleDateFormat outputFormat = new SimpleDateFormat(DATE_TIME_OUTPUT_PATTERN, Locale.US);
+      outputFormat.setTimeZone(TimeZone.getDefault());
+      if (parsedDate != null) return outputFormat.format(parsedDate);
+      return null;
+    } catch (ParseException ex) {
+      // Log exception
+      return null;
     }
+  }
 }

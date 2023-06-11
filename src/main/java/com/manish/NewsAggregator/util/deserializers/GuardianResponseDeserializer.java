@@ -17,7 +17,7 @@ import java.util.UUID;
 public class GuardianResponseDeserializer extends DeserializerFactory {
     @Override
     public GuardianResults deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException, JacksonException {
+            throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         Iterator<JsonNode> docsIterator = node.get("response").get("results").iterator();
         ArrayList<Article> articles = new ArrayList<>();

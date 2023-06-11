@@ -3,29 +3,21 @@ package com.manish.NewsAggregator.controllers;
 import com.manish.NewsAggregator.model.Results;
 import com.manish.NewsAggregator.services.ArticleAggregatorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/news")
 public class ArticleAggregatorController {
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private WebClient webClient;
 
     @Autowired
     private ArticleAggregatorService articleAggregatorService;
-
-    @GetMapping("/ping")
-    public String ping(){
-        return "Healthy!!";
-    }
 
     @GetMapping("/search")
     public Results getSearchResults(

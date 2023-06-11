@@ -1,5 +1,6 @@
 package com.manish.NewsAggregator.services;
 
+import com.manish.NewsAggregator.constants.NetworkConstants;
 import com.manish.NewsAggregator.model.NYTResults;
 import com.manish.NewsAggregator.model.Results;
 import com.manish.NewsAggregator.util.URLBuilder;
@@ -8,12 +9,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class NYTApiClientService implements SourceApiClient{
+public class NYTApiClientSourceService implements ApiClientSource {
 
     @Override
     public Mono<? extends Results> getArticle(WebClient webClient, String query, int pageNum) {
         URLBuilder urlBuilder = URLBuilder.builder()
-                .baseUrl("https://api.nytimes.com/svc/search/v2/articlesearch.json")
+                .baseUrl(NetworkConstants.NYT_API_BASE_URL)
+                .endPoint(NetworkConstants.NYT_API_SEARCH_ARTICLE_END_POINT)
                 .query(query)
                 .pageNum(pageNum)
                 .apiKey("mL3egouwMW570XuOAGbbAB0t0wguOmIC")

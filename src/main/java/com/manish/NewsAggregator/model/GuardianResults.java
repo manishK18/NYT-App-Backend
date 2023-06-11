@@ -5,8 +5,8 @@ import com.manish.NewsAggregator.util.deserializers.GuardianResponseDeserializer
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonDeserialize(using = GuardianResponseDeserializer.class)
 public class GuardianResults extends Results{
 }
