@@ -1,0 +1,37 @@
+@startuml
+actor Client as client
+participant API_Gateway as apiGateway
+database ValidUsersDB as tokenDB
+participant ArticleAggregatorController as articleAggregatorController
+participant ArticleAggregatorService as articleAggregatorService
+participant NYTApiClientService as nytApiClientService
+participant GuardianApiClientService as guardianApiClientService
+participant NYTPublicAPI as nytApi
+participant GuardianPublicAPI as guardianApi
+database CacheDb as cache
+
+autonumber 1 1
+client --> apiGateway: Token Generation Request
+apiGateway --> tokenDB: Store jwt token for the user
+apiGateway --> client: Send JWT Token
+
+client --> apiGateway: Search for article given "query" along with authtoken
+
+alt Authentication successful
+   apiGateway --> articleAggregatorController: Get the article result for the "query"
+   articleAggregatorController --> articleAggregatorService: Get the aggregated results for "query"
+   autonumber stop
+   autonumber 7 0
+   par
+     articleAggregatorService --> nytApiClientService: Get the results from NYT for given "query"
+     nytApiClientService --> nytApi: Get the results from NYTPublicApi for given "query"
+     articleAggregatorService --> guardianApiClientService: Get the results from GuardianPublicApi
+   end
+autonumber 5 1
+else Authenticaton failure
+   apiGateway --> client: Unauthorized request
+end
+autonumber stop
+
+
+@enduml
