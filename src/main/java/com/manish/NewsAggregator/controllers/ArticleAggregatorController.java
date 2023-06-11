@@ -23,7 +23,8 @@ public class ArticleAggregatorController {
     public Results getSearchResults(
             @RequestParam("query") String query,
             @RequestParam("offset") int offset,
-            @RequestParam("limit") int limit)
+            @RequestParam("limit") int limit
+    )
     {
         return articleAggregatorService.getAggregatedResults(webClient, query, offset, limit);
     }

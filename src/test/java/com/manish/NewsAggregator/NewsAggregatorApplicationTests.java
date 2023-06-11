@@ -2,12 +2,45 @@ package com.manish.NewsAggregator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-class NewsAggregatorApplicationTests {
+@AutoConfigureMockMvc
+public class NewsAggregatorApplicationTests {
+
+	@Autowired
+	private MockMvc mockMvc;
 
 	@Test
-	void contextLoads() {
+	public void getSearchResults() throws Exception {
+		mockMvc.perform(
+				MockMvcRequestBuilders
+						.get("/news/search")
+						.queryParam("query", "trump")
+						.queryParam("offset", "0")
+						.queryParam("limit", "20")
+				)
+				.andExpect(status().isOk())
+				.andReturn();
 	}
 
+	@Test
+	public void getSearchResultsWithOffset() throws Exception {
+		mockMvc.perform(
+						MockMvcRequestBuilders
+								.get("/news/search")
+								.queryParam("query", "trump")
+								.queryParam("offset", "20")
+								.queryParam("limit", "20")
+				)
+				.andExpect(status().isOk())
+				.andReturn();
+	}
 }
