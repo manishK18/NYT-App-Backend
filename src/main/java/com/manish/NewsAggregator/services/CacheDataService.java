@@ -6,7 +6,6 @@ import com.manish.NewsAggregator.repository.ArticleDataRepository;
 import com.manish.NewsAggregator.repository.CacheDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -22,9 +21,9 @@ public class CacheDataService {
     private ArticleDataRepository articleDataRepository;
 
     public void storeData(String id, Results data){
-        Results results = new Results(id, data.getResults());
+        Results results = new Results(id, data.getArticles());
         List<Article> uniqueArticlesInCache = new ArrayList<>();
-        data.getResults().forEach(
+        data.getArticles().forEach(
                 article -> {
                     if (!articleDataRepository.existsByHeadline(article.getHeadline())) {
                         uniqueArticlesInCache.add(article);
@@ -32,7 +31,7 @@ public class CacheDataService {
                 }
         );
         if (!uniqueArticlesInCache.isEmpty()) {
-            results.setResults(uniqueArticlesInCache);
+            results.setArticles(uniqueArticlesInCache);
             cacheDataRepository.save(results);
         }
     }

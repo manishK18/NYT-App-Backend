@@ -1,9 +1,10 @@
 package com.manish.NewsAggregator.util.deserializers;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.manish.NewsAggregator.constants.Constants;
+import com.manish.NewsAggregator.constants.TimeUtils;
 import com.manish.NewsAggregator.model.Article;
 import com.manish.NewsAggregator.model.GuardianResults;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Component
 public class GuardianResponseDeserializer extends DeserializerFactory {
+
     @Override
     public GuardianResults deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException {
@@ -27,14 +29,17 @@ public class GuardianResponseDeserializer extends DeserializerFactory {
             articles.add(article);
         }
         GuardianResults guardianResults = new GuardianResults();
-        guardianResults.setResults(articles);
+        guardianResults.setArticles(articles);
         return guardianResults;
     }
 
     private Article deserializeToArticle(JsonNode item) {
         String headline = item.get("webTitle").asText(null);
         String webUrl = item.get("webUrl").asText(null);
-        String publishedDate = getFormattedDateTime(item.get("webPublicationDate").asText(null));
+        String publishedDate = getFormattedDateTime(
+                item.get("webPublicationDate").asText(null),
+                TimeUtils.DATE_TIME_INPUT_PATTERN_TYPE_2
+        );
         String typeOfMaterial = null;
         if (item.hasNonNull("type")) {
             typeOfMaterial = item.get("type").asText(null);
@@ -42,9 +47,9 @@ public class GuardianResponseDeserializer extends DeserializerFactory {
         return Article.builder()
                 .id(UUID.randomUUID().toString())
                 .headline(headline)
-                .description(null)
-                .imageUrl(null)
-                .authorName(null)
+                .description(Constants.DEFAULT_DESCRIPTION)
+                .imageUrl(Constants.DEFAULT_IMAGE_URL)
+                .authorName(Constants.DEFAULT_NOT_AVAILABLE)
                 .webUrl(webUrl)
                 .publishedDate(publishedDate)
                 .keywords(null)

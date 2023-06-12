@@ -3,6 +3,8 @@ package com.manish.NewsAggregator.util.deserializers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.manish.NewsAggregator.constants.Constants;
+import com.manish.NewsAggregator.constants.TimeUtils;
 import com.manish.NewsAggregator.model.Article;
 import com.manish.NewsAggregator.model.Results;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,7 @@ public class NYTResponseDeserializer extends DeserializerFactory{
             articles.add(article);
         }
         Results results = new Results();
-        results.setResults(articles);
+        results.setArticles(articles);
         return results;
     }
 
@@ -37,7 +39,10 @@ public class NYTResponseDeserializer extends DeserializerFactory{
         String imageUrl = getImageUrl(multimedia);
         String webUrl = item.get("web_url").asText(null);
         String authorName = item.get("byline").get("original").asText(null);
-        String publishedDate = getFormattedDateTime(item.get("pub_date").asText(null));
+        String publishedDate = getFormattedDateTime(
+                item.get("pub_date").asText(null),
+                TimeUtils.DATE_TIME_INPUT_PATTERN_TYPE_1
+        );
         String keywords = getKeywords(item.get("keywords"));
         String typeOfMaterial = null;
         if (item.hasNonNull("type_of_material")) {
@@ -60,7 +65,7 @@ public class NYTResponseDeserializer extends DeserializerFactory{
     private String getImageUrl(JsonNode multimedia) {
         for (JsonNode image : multimedia) {
             if (image.get("subtype").asText().contentEquals("xlarge")) {
-                return "https://www.nytimes.com/" + image.get("url").asText();
+                return Constants.IMAGE_PATH_PREFIX + image.get("url").asText();
             }
         }
         return null;

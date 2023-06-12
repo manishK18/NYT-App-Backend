@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse {
+public class SourceApiResponse {
     public List<Article> articleList;
 }

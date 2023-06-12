@@ -4,6 +4,7 @@ import com.manish.NewsAggregator.constants.NetworkConstants;
 import com.manish.NewsAggregator.model.NYTResults;
 import com.manish.NewsAggregator.model.Results;
 import com.manish.NewsAggregator.util.URLBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -18,7 +19,7 @@ public class NYTApiClientSourceService implements ApiClientSource {
                 .endPoint(NetworkConstants.NYT_API_SEARCH_ARTICLE_END_POINT)
                 .query(query)
                 .pageNum(pageNum)
-                .apiKey("mL3egouwMW570XuOAGbbAB0t0wguOmIC")
+                .apiKey("NG6qSWNgnOxNYHldrxthbkoMjmoUYkhG")
                 .build();
 
         return webClient.get()
@@ -27,6 +28,3 @@ public class NYTApiClientSourceService implements ApiClientSource {
                 .bodyToMono(NYTResults.class);
     }
 }
-
-// mL3egouwMW570XuOAGbbAB0t0wguOmIC
-// NG6qSWNgnOxNYHldrxthbkoMjmoUYkhG

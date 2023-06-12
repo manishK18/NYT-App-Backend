@@ -1,8 +1,6 @@
 package com.manish.NewsAggregator.services;
 
-import com.manish.NewsAggregator.model.ApiResponse;
-import com.manish.NewsAggregator.model.Article;
-import com.manish.NewsAggregator.model.Results;
+import com.manish.NewsAggregator.model.*;
 import org.apache.commons.text.similarity.JaccardSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,30 +27,36 @@ public class ArticleAggregatorService {
   @Autowired
   private CacheDataService cacheDataService;
 
-  public Results getAggregatedResults(WebClient webClient, String query, int offset, int limit) {
-    Results response = new Results(query, new ArrayList<>());
-    ApiResponse nytApiResponse = new ApiResponse(new ArrayList<>());
-    ApiResponse guardianApiResponse = new ApiResponse(new ArrayList<>());
-    if (limit == 0) return response;
+  public Response getAggregatedResults(WebClient webClient, String query, int offset, int limit) {
+
+    Results results = new Results(query, new ArrayList<>());
+    Response response = Response.builder()
+            .query(query)
+            .articles(results.getArticles())
+            .metaData(new MetaData(offset, limit))
+            .build();
+    SourceApiResponse nytApiResponse = new SourceApiResponse(new ArrayList<>());
+    SourceApiResponse guardianApiResponse = new SourceApiResponse(new ArrayList<>());
+
     int pageNum = (offset / limit) + 1;
 
     Mono<? extends Results> nytResults = nytApiClientService.getArticle(webClient, query, pageNum);
     Mono<? extends Results> guardianResults = guardianApiClientService.getArticle(webClient, query, pageNum);
 
     nytResults.doOnSuccess(
-            nytResponse -> nytApiResponse.getArticleList().addAll(nytResponse.getResults())
+            nytResponse -> nytApiResponse.getArticleList().addAll(nytResponse.getArticles())
     ).onErrorResume(
             throwable -> {
-              System.out.println("NYT Api failed to fetch data");
+              System.out.println("NYT Api failed to fetch data due to: " + throwable.getMessage());
               return Mono.empty();
             }
     ).subscribe();
 
     guardianResults.doOnSuccess(
-            guardianResponse -> guardianApiResponse.getArticleList().addAll(guardianResponse.getResults())
+            guardianResponse -> guardianApiResponse.getArticleList().addAll(guardianResponse.getArticles())
     ).onErrorResume(
             throwable -> {
-              System.out.println("GUARDIAN Api failed to fetch data");
+              System.out.println("Guardian Api failed to fetch data due to: " + throwable.getMessage());
               return Mono.empty();
             }
     ).subscribe();
@@ -63,26 +67,31 @@ public class ArticleAggregatorService {
             );
     combined.subscribe();
     combined.block();
+
     // Set result with non-duplicate
-    response.setResults(
+    results.setArticles(
             removeDuplicates(nytApiResponse, guardianApiResponse)
     );
 
-    if (Objects.nonNull(response.getResults())) {
-      cacheDataService.storeData(query, response);
+    if (Objects.nonNull(results.getArticles())) {
+      cacheDataService.storeData(query, results);
     } else {
       cacheDataService.getCachedDataForQuery(query, offset, limit).doOnSuccess(
-              cachedResponse -> response.getResults().addAll(cachedResponse.getResults())
+              cachedResponse -> results.getArticles().addAll(cachedResponse.getArticles())
       ).onErrorResume(
               throwable -> Mono.empty()
       );
     }
+
+    response.setArticles(results.getArticles());
+    response.setMetaData(new MetaData(offset + results.getArticles().size(), limit));
+
     return response;
   }
 
-  private List<Article> removeDuplicates(ApiResponse nytApiResponse, ApiResponse guardianApiResponse) {
-    List<Article> nytArticles = nytApiResponse.getArticleList();
-    Set<Article> guardianArticles = new HashSet<>(guardianApiResponse.getArticleList());
+  private List<Article> removeDuplicates(SourceApiResponse nytSourceApiResponse, SourceApiResponse guardianSourceApiResponse) {
+    List<Article> nytArticles = nytSourceApiResponse.getArticleList();
+    Set<Article> guardianArticles = new HashSet<>(guardianSourceApiResponse.getArticleList());
     List<Article> uniqueArticles = new ArrayList<>(nytArticles);
 
     for (Article nytArticle : nytArticles) {

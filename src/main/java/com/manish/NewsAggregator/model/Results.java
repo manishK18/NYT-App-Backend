@@ -20,5 +20,7 @@ public class Results {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "results_id")
-    protected List<Article> results;
+    protected List<Article> articles;
+
+//    protected MetaData metaData;
 }
