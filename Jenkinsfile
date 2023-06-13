@@ -4,17 +4,23 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo "Build stage starting..."
                 sh "mvn clean package -DskipTests"
+                echo "Build stage completed..."
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing...'
+                echo "Test stage starting..."
+                echo "mvn test"
+                echo "Test stage completed..."
             }
         }
         stage('Deploy') {
             steps {
+                echo "Deploy stage starting..."
                 sh 'docker-compose up --build -d'
+                echo "Deployment completed..."
             }
         }
     }

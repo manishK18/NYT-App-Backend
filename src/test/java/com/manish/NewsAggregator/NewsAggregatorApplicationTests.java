@@ -1,6 +1,12 @@
 package com.manish.NewsAggregator;
 
+import com.manish.NewsAggregator.repository.ArticleDataRepository;
+import com.manish.NewsAggregator.repository.CacheDataRepository;
+import com.manish.NewsAggregator.services.CacheDataService;
+import org.hibernate.dialect.PostgreSQLDialect;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.jupiter.api.extension.ExtendWith;
