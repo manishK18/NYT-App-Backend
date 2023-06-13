@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
   database:
-    build: ./postgres/
     env_file:
-      - /var/lib/jenkins/.env
+      - .env
+    build: ./postgres/
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -17,9 +17,9 @@ services:
       - newsappnetwork
 
   newsaggregator:
-    build: ./
     env_file:
-      - /var/lib/jenkins/.env
+      - .env
+    build: ./
     ports:
       - "8081:8080"
     depends_on:

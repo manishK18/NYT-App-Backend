@@ -17,4 +17,4 @@ COPY ./target/$artifactId.jar app.jar
 EXPOSE 8080
 
 #Command to start the spring boot application on docker run
-ENTRYPOINT ["java", "-jar", "/usr/backendapp/app.jar", "--nytApiKey=$NYT_API_KEY", "--guardianApiKey=$GUARDIAN_API_KEY"]
+ENTRYPOINT ["java", "-jar", "/usr/backendapp/app.jar"]

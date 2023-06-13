@@ -5,11 +5,6 @@ FROM postgres:latest
 LABEL author="Manish Kumar"
 LABEL description="Postgres image for newsapp db"
 
-# Set environment variables
-ENV POSTGRES_USER admin
-ENV POSTGRES_PASSWORD="admin"
-ENV POSTGRES_DB newsappdatabase
-
 # Create a directory for the persistent volume
 RUN mkdir -p /var/lib/postgresql/data
 

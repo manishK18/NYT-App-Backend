@@ -1,7 +1,11 @@
 package com.manish.NewsAggregator.services;
 
 import com.manish.NewsAggregator.model.*;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.JaccardSimilarity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,6 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class ArticleAggregatorService {
 
   private static final double THRESHOLD = 0.9;
@@ -47,7 +52,8 @@ public class ArticleAggregatorService {
             nytResponse -> nytApiResponse.getArticleList().addAll(nytResponse.getArticles())
     ).onErrorResume(
             throwable -> {
-              System.out.println("NYT Api failed to fetch data due to: " + throwable.getMessage());
+              log.info("NYT Api failed to fetch data due to: " + throwable.getMessage()
+                      .replaceFirst("/from.*/gm", ""));
               return Mono.empty();
             }
     ).subscribe();
@@ -56,7 +62,7 @@ public class ArticleAggregatorService {
             guardianResponse -> guardianApiResponse.getArticleList().addAll(guardianResponse.getArticles())
     ).onErrorResume(
             throwable -> {
-              System.out.println("Guardian Api failed to fetch data due to: " + throwable.getMessage());
+              log.info("Guardian Api failed to fetch data due to: " + throwable.getMessage());
               return Mono.empty();
             }
     ).subscribe();

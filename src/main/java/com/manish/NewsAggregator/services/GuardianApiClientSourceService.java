@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class GuardianApiClientSourceService implements ApiClientSource {
-
     @Autowired
     private Secrets secrets;
 
