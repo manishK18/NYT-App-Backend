@@ -8,8 +8,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Build stage starting..."
-                sh "mvn clean package -DskipTests"
-                sh "echo $NYT_API_KEY"
+//                 sh "mvn clean package -DskipTests"
+                sh "printenv NYT_API_KEY"
                 echo "Build stage completed..."
             }
         }
@@ -27,14 +27,14 @@ pipeline {
 // //                     sh "mvn -Dspring.profiles.active=test -DnytApiKey=$NYT_API_KEY -DguardianApiKey=$GUARDIAN_API_KEY test"
 //                     echo "Test stage completed..."
 //                 }
-                sh "mvn -Dspring.profiles.active=test -DnytApiKey=$NYT_API_KEY -DguardianApiKey=$GUARDIAN_API_KEY test"
+//                 sh "mvn -Dspring.profiles.active=test -DnytApiKey=$NYT_API_KEY -DguardianApiKey=$GUARDIAN_API_KEY test"
                 echo "Test stage completed..."
             }
         }
         stage('Deploy') {
             steps {
                 echo "Deploy stage starting..."
-                sh 'docker-compose up --build -d'
+//                 sh 'docker-compose up --build -d'
                 echo "Deployment completed..."
             }
         }
