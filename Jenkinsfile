@@ -12,7 +12,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Test stage starting..."
-                sh "mvn -Dspring.profiles.active=test test"
+                sh "mvn -Dspring.profiles.active=test -DnytApiKey=$NYT_API_KEY -DguardianApiKey=$GUARDIAN_API_KEY test"
                 echo "Test stage completed..."
             }
         }
