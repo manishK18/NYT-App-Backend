@@ -11,19 +11,19 @@ import org.springframework.context.annotation.Configuration;
 public class SpringApiDocConfig {
   private static final String API_DOC_DESC = "Official documentation for the NewsApp API";
 
-  @Autowired
-  BuildProperties buildProperties;
-
-  @Bean
-  public OpenAPI api(){
-    return new OpenAPI()
-            .info(getApiInfo());
-  }
-
-  private Info getApiInfo() {
-    return new Info()
-            .title(buildProperties.getName())
-            .description(API_DOC_DESC)
-            .version(buildProperties.getVersion());
-  }
+//  @Autowired
+//  BuildProperties buildProperties;
+//
+//  @Bean
+//  public OpenAPI api(){
+//    return new OpenAPI()
+//            .info(getApiInfo());
+//  }
+//
+//  private Info getApiInfo() {
+//    return new Info()
+//            .title(buildProperties.getName())
+//            .description(API_DOC_DESC)
+//            .version(buildProperties.getVersion());
+//  }
 }

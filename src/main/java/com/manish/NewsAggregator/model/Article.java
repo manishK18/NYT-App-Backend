@@ -27,5 +27,5 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "query_id")
     @JsonIgnore
-    protected Query query;
+    protected QueryData queryData;
 }

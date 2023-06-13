@@ -1,7 +1,7 @@
 package com.manish.NewsAggregator.util.deserializers;
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.manish.NewsAggregator.model.Query;
+import com.manish.NewsAggregator.model.QueryData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import java.util.TimeZone;
 
 import static com.manish.NewsAggregator.constants.TimeUtils.DATE_TIME_OUTPUT_PATTERN;
 
-public abstract class DeserializerFactory extends JsonDeserializer<Query> {
+public abstract class DeserializerFactory extends JsonDeserializer<QueryData> {
   protected String getFormattedDateTime(String dateTimeText, String inputPattern) {
     if (dateTimeText == null || dateTimeText.isEmpty()) return null;
     try {

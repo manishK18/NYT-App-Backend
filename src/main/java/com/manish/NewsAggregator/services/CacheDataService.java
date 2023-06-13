@@ -1,7 +1,7 @@
 package com.manish.NewsAggregator.services;
 
 import com.manish.NewsAggregator.model.Article;
-import com.manish.NewsAggregator.model.Query;
+import com.manish.NewsAggregator.model.QueryData;
 import com.manish.NewsAggregator.repository.ArticleDataRepository;
 import com.manish.NewsAggregator.repository.CacheDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +20,27 @@ public class CacheDataService {
     @Autowired
     private ArticleDataRepository articleDataRepository;
 
-    public void storeData(String queryValue, Query data) {
-        Query exisitingQuery = cacheDataRepository.getQueryByValue(queryValue);
-        final Query query = exisitingQuery == null ? new Query(queryValue) : exisitingQuery;
+    public void storeData(String queryValue, QueryData data) {
+        QueryData exisitingQueryData = cacheDataRepository.getQueryByValue(queryValue);
+        final QueryData queryData = exisitingQueryData == null ? new QueryData(queryValue) : exisitingQueryData;
 
         List<Article> uniqueArticlesInCache = new ArrayList<>();
         data.getArticles().forEach(
                 article -> {
                     if (!articleDataRepository.existsByHeadline(article.getHeadline())) {
                         uniqueArticlesInCache.add(article);
-                        article.setQuery(query);
+                        article.setQueryData(queryData);
                     }
                 }
         );
         if (!uniqueArticlesInCache.isEmpty()) {
-            query.getArticles().addAll(uniqueArticlesInCache);
-            cacheDataRepository.save(query);
+            queryData.getArticles().addAll(uniqueArticlesInCache);
+            cacheDataRepository.save(queryData);
         }
     }
 
-    public Mono<Query> getCachedDataForQuery(String query, int offset, int limit) {
-        Query cachedQuery = cacheDataRepository.getResultsWithQuery(query, offset, limit);
-        return Mono.just(cachedQuery);
+    public Mono<QueryData> getCachedDataForQuery(String query, int offset, int limit) {
+        QueryData cachedQueryData = cacheDataRepository.getResultsWithQuery(query, offset, limit);
+        return Mono.just(cachedQueryData);
     }
 }

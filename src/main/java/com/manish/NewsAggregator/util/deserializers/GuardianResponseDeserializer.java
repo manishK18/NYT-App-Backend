@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.manish.NewsAggregator.constants.Constants;
 import com.manish.NewsAggregator.constants.TimeUtils;
 import com.manish.NewsAggregator.model.Article;
-import com.manish.NewsAggregator.model.GuardianQuery;
+import com.manish.NewsAggregator.model.GuardianQueryData;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.UUID;
 public class GuardianResponseDeserializer extends DeserializerFactory {
 
     @Override
-    public GuardianQuery deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public GuardianQueryData deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         Iterator<JsonNode> docsIterator = node.get("response").get("results").iterator();
@@ -28,7 +28,7 @@ public class GuardianResponseDeserializer extends DeserializerFactory {
             Article article = deserializeToArticle(item);
             articles.add(article);
         }
-        GuardianQuery guardianResults = new GuardianQuery();
+        GuardianQueryData guardianResults = new GuardianQueryData();
         guardianResults.setArticles(articles);
         return guardianResults;
     }

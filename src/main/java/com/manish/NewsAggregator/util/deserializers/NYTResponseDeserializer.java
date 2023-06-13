@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.manish.NewsAggregator.constants.Constants;
 import com.manish.NewsAggregator.constants.TimeUtils;
 import com.manish.NewsAggregator.model.Article;
-import com.manish.NewsAggregator.model.Query;
+import com.manish.NewsAggregator.model.QueryData;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Component
 public class NYTResponseDeserializer extends DeserializerFactory{
     @Override
-    public Query deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public QueryData deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         Iterator<JsonNode> docsIterator = node.get("response").get("docs").iterator();
@@ -27,9 +27,9 @@ public class NYTResponseDeserializer extends DeserializerFactory{
             Article article = deserializeToArticle(item);
             articles.add(article);
         }
-        Query query = new Query();
-        query.setArticles(articles);
-        return query;
+        QueryData queryData = new QueryData();
+        queryData.setArticles(articles);
+        return queryData;
     }
 
     private Article deserializeToArticle(JsonNode item) {

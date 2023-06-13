@@ -15,17 +15,17 @@ client --> apiGateway: Token Generation Request
 apiGateway --> tokenDB: Store jwt token for the user
 apiGateway --> client: Send JWT Token
 
-client --> apiGateway: Search for article given "query" along with authtoken
+client --> apiGateway: Search for article given "queryData" along with authtoken
 
 alt Authentication successful
-   apiGateway --> articleAggregatorController: Get the article result for the "query"
-   articleAggregatorController --> articleAggregatorService: Get the aggregated query for "query"
+   apiGateway --> articleAggregatorController: Get the article result for the "queryData"
+   articleAggregatorController --> articleAggregatorService: Get the aggregated queryData for "queryData"
    autonumber stop
    autonumber 7 0
    par
-     articleAggregatorService --> nytApiClientService: Get the query from NYT for given "query"
-     nytApiClientService --> nytApi: Get the query from NYTPublicApi for given "query"
-     articleAggregatorService --> guardianApiClientService: Get the query from GuardianPublicApi
+     articleAggregatorService --> nytApiClientService: Get the queryData from NYT for given "queryData"
+     nytApiClientService --> nytApi: Get the queryData from NYTPublicApi for given "queryData"
+     articleAggregatorService --> guardianApiClientService: Get the queryData from GuardianPublicApi
    end
 autonumber 5 1
 else Authenticaton failure
