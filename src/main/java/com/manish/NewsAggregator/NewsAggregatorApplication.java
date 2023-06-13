@@ -1,5 +1,6 @@
 package com.manish.NewsAggregator;
 
+import com.manish.NewsAggregator.constants.Secrets;
 import org.apache.commons.text.similarity.JaccardSimilarity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,8 @@ public class NewsAggregatorApplication {
 		return WebClient.create();
 	}
 
+	@Bean
+	public Secrets getSecrets(){ return new Secrets(); }
 	@Bean
 	public JaccardSimilarity getJaccardSimilarity() {
 		return new JaccardSimilarity();

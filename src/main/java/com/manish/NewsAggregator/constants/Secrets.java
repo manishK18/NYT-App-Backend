@@ -1,9 +1,18 @@
 package com.manish.NewsAggregator.constants;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Secrets {
-    public static String nytApiKey = System.getenv("NYT_API_KEY");
-    public static String guardianApiKey = System.getenv("GUARDIAN_API_KEY");;
+    @Value("${nytApiKey}")
+    public String nytApiKey;
+    @Value("${guardianApiKey}")
+    public String guardianApiKey;
 }
