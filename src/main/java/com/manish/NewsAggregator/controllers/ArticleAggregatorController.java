@@ -3,6 +3,9 @@ package com.manish.NewsAggregator.controllers;
 import com.manish.NewsAggregator.constants.Constants;
 import com.manish.NewsAggregator.model.Response;
 import com.manish.NewsAggregator.services.ArticleAggregatorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -24,16 +27,27 @@ public class ArticleAggregatorController {
     private ArticleAggregatorService articleAggregatorService;
 
     @GetMapping("/ping")
+    @Operation(summary = "Health check endpoint",
+            description = "This endpoint can be used to check if the api is live or not")
+    @ApiResponse(responseCode = "200", description = "API is live and healthy")
     public ResponseEntity<String> ping(){
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/news/search")
+    @Operation(summary = "Search the articles for the given query",
+            description = "This endpoint can be used to search for the articles by providing the " +
+                    "query parameter and it also supports pagination so provide the offset and limit")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "400", description = "Bad request when you provide the limit as 0"),
+            @ApiResponse(responseCode = "204", description = "No content available meaning neither source APIs " +
+                    "returned data nor cache data available"),
+            @ApiResponse(responseCode = "200", description = "Successfully returned the data requested")
+    })
     public ResponseEntity<Response> getSearchResults(
             @RequestParam("query") String query,
             @RequestParam("offset") int offset,
-            @RequestParam("limit") int limit
-    )
+            @RequestParam("limit") int limit)
     {
         if (limit == 0) {
             return ResponseEntity

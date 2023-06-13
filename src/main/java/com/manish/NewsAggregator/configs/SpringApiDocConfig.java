@@ -2,23 +2,28 @@ package com.manish.NewsAggregator.configs;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SpringApiDocConfig {
-  @Bean
-  public OpenAPI apiInfo() {
-    return new OpenAPI()
-            .info(new Info().title("Manish Kumar").version("1.0.0"));
-  }
+  private static final String API_DOC_DESC = "Official documentation for the NewsApp API";
+
+  @Autowired
+  BuildProperties buildProperties;
 
   @Bean
-  public GroupedOpenApi httpApi() {
-    return GroupedOpenApi.builder()
-            .group("http")
-            .pathsToMatch("/**")
-            .build();
+  public OpenAPI api(){
+    return new OpenAPI()
+            .info(getApiInfo());
+  }
+
+  private Info getApiInfo() {
+    return new Info()
+            .title(buildProperties.getName())
+            .description(API_DOC_DESC)
+            .version(buildProperties.getVersion());
   }
 }
