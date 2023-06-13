@@ -9,7 +9,7 @@ pipeline {
             steps {
                 echo "Build stage starting..."
                 sh "mvn clean package -DskipTests"
-                echo ${env.NYT_API_KEY}
+                echo "${env.NYT_API_KEY}"
                 echo "Build stage completed..."
             }
         }
