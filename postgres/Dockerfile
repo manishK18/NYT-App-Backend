@@ -7,7 +7,7 @@ LABEL description="Postgres image for newsapp db"
 
 # Set environment variables
 ENV POSTGRES_USER admin
-ENV POSTGRES_PASSWORD="docker"
+ENV POSTGRES_PASSWORD="admin"
 ENV POSTGRES_DB newsappdatabase
 
 # Create a directory for the persistent volume

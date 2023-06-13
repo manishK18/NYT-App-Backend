@@ -12,7 +12,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Test stage starting..."
-                sh "mvn test -Dprofile=test"
+                sh "mvn -Dspring.profiles.active=test test"
                 echo "Test stage completed..."
             }
         }
