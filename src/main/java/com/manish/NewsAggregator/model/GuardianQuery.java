@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonDeserialize(using = GuardianResponseDeserializer.class)
-public class GuardianResults extends Results{
+public class GuardianQuery extends Query {
 }

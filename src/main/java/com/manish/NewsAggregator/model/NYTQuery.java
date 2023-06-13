@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonDeserialize(using = NYTResponseDeserializer.class)
-public class NYTResults extends Results{
+public class NYTQuery extends Query {
 }

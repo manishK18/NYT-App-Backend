@@ -1,7 +1,7 @@
 package com.manish.NewsAggregator.services;
 
 import com.manish.NewsAggregator.model.Article;
-import com.manish.NewsAggregator.model.Results;
+import com.manish.NewsAggregator.model.Query;
 import com.manish.NewsAggregator.repository.ArticleDataRepository;
 import com.manish.NewsAggregator.repository.CacheDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +20,27 @@ public class CacheDataService {
     @Autowired
     private ArticleDataRepository articleDataRepository;
 
-    public void storeData(String id, Results data){
-        Results results = new Results(id, data.getArticles());
+    public void storeData(String queryValue, Query data) {
+        Query exisitingQuery = cacheDataRepository.getQueryByValue(queryValue);
+        final Query query = exisitingQuery == null ? new Query(queryValue) : exisitingQuery;
+
         List<Article> uniqueArticlesInCache = new ArrayList<>();
         data.getArticles().forEach(
                 article -> {
                     if (!articleDataRepository.existsByHeadline(article.getHeadline())) {
                         uniqueArticlesInCache.add(article);
+                        article.setQuery(query);
                     }
                 }
         );
         if (!uniqueArticlesInCache.isEmpty()) {
-            results.setArticles(uniqueArticlesInCache);
-            cacheDataRepository.save(results);
+            query.getArticles().addAll(uniqueArticlesInCache);
+            cacheDataRepository.save(query);
         }
     }
 
-    public Mono<Results> getCachedDataForQuery(String query, int offset, int limit){
-        Results cachedResults = cacheDataRepository.getResultsWithQuery(query, offset, limit);
-        return Mono.just(cachedResults);
+    public Mono<Query> getCachedDataForQuery(String query, int offset, int limit) {
+        Query cachedQuery = cacheDataRepository.getResultsWithQuery(query, offset, limit);
+        return Mono.just(cachedQuery);
     }
 }

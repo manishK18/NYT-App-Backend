@@ -19,13 +19,13 @@ client --> apiGateway: Search for article given "query" along with authtoken
 
 alt Authentication successful
    apiGateway --> articleAggregatorController: Get the article result for the "query"
-   articleAggregatorController --> articleAggregatorService: Get the aggregated results for "query"
+   articleAggregatorController --> articleAggregatorService: Get the aggregated query for "query"
    autonumber stop
    autonumber 7 0
    par
-     articleAggregatorService --> nytApiClientService: Get the results from NYT for given "query"
-     nytApiClientService --> nytApi: Get the results from NYTPublicApi for given "query"
-     articleAggregatorService --> guardianApiClientService: Get the results from GuardianPublicApi
+     articleAggregatorService --> nytApiClientService: Get the query from NYT for given "query"
+     nytApiClientService --> nytApi: Get the query from NYTPublicApi for given "query"
+     articleAggregatorService --> guardianApiClientService: Get the query from GuardianPublicApi
    end
 autonumber 5 1
 else Authenticaton failure

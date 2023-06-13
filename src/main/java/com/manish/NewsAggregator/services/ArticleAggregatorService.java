@@ -29,7 +29,7 @@ public class ArticleAggregatorService {
 
   public Response getAggregatedResults(WebClient webClient, String query, int offset, int limit) {
 
-    Results results = new Results(query, new ArrayList<>());
+    Query results = new Query(query, new ArrayList<>());
     Response response = Response.builder()
             .query(query)
             .articles(results.getArticles())
@@ -40,8 +40,8 @@ public class ArticleAggregatorService {
 
     int pageNum = (offset / limit) + 1;
 
-    Mono<? extends Results> nytResults = nytApiClientService.getArticle(webClient, query, pageNum);
-    Mono<? extends Results> guardianResults = guardianApiClientService.getArticle(webClient, query, pageNum);
+    Mono<? extends Query> nytResults = nytApiClientService.getArticle(webClient, query, pageNum);
+    Mono<? extends Query> guardianResults = guardianApiClientService.getArticle(webClient, query, pageNum);
 
     nytResults.doOnSuccess(
             nytResponse -> nytApiResponse.getArticleList().addAll(nytResponse.getArticles())
@@ -61,7 +61,7 @@ public class ArticleAggregatorService {
             }
     ).subscribe();
 
-    Mono<? extends Tuple2<? extends Results, ? extends Results>> combined = Mono.zip(nytResults, guardianResults)
+    Mono<? extends Tuple2<? extends Query, ? extends Query>> combined = Mono.zip(nytResults, guardianResults)
             .onErrorResume(
                     throwable -> Mono.empty()
             );

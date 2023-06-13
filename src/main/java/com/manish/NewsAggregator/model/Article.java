@@ -1,8 +1,7 @@
 package com.manish.NewsAggregator.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +24,8 @@ public class Article {
     private String webUrl;
     private String authorName;
     private String typeOfMaterial;
+    @ManyToOne
+    @JoinColumn(name = "query_id")
+    @JsonIgnore
+    protected Query query;
 }
