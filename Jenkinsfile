@@ -16,13 +16,13 @@ pipeline {
             steps {
                 echo "Test stage starting..."
                 withAWS(credentials: 'Jenkins-test-user', region: 'eu-north-1') {
-                    INSTANCE_ID="i-040e613ab6afec7a7"
-
-                    ENV_VARS=$(aws ec2 describe-instances \
-                           --instance-ids $INSTANCE_ID \
-                           --query "Reservations[].Instances[].Tags[?Key=='EnvironmentVariables'].Value[]" \
-                           --output text)
-                    echo "Environment Variables: $ENV_VARS"
+//                     INSTANCE_ID="i-040e613ab6afec7a7"
+//
+//                     ENV_VARS=$(aws ec2 describe-instances \
+//                            --instance-ids $INSTANCE_ID \
+//                            --query "Reservations[].Instances[].Tags[?Key=='EnvironmentVariables'].Value[]" \
+//                            --output text)
+                    echo "Environment Variables: ${AWS_ACCESS_KEY_ID}"
 //                     sh "mvn -Dspring.profiles.active=test -DnytApiKey=$NYT_API_KEY -DguardianApiKey=$GUARDIAN_API_KEY test"
                     echo "Test stage completed..."
                 }
