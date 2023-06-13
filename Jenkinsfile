@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploy stage starting..."
-                sh 'docker-compose up --env-file .\/.env --build -d'
+                sh 'docker-compose up --env-file /var/lib/jenkins/.env --build -d'
                 echo "Deployment completed..."
             }
         }
