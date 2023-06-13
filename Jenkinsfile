@@ -12,7 +12,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Test stage starting..."
-                sh "mvn test"
+                sh "mvn test -Dprofile=test"
                 echo "Test stage completed..."
             }
         }
