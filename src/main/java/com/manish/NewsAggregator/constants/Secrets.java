@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 @AllArgsConstructor
 public class Secrets {
     @Value("${nytApiKey}")
-    public String nytApiKey;
+    private String nytApiKey;
     @Value("${guardianApiKey}")
-    public String guardianApiKey;
+    private String guardianApiKey;
 }

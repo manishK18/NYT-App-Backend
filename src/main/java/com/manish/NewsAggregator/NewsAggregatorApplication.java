@@ -13,7 +13,6 @@ public class NewsAggregatorApplication {
 	public WebClient getWebClient(){
 		return WebClient.create();
 	}
-
 	@Bean
 	public Secrets getSecrets(){ return new Secrets(); }
 	@Bean
