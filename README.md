@@ -6,9 +6,8 @@
 *NOTE: These may not be accessible if my instance is in stopped state
 
 ## About
-Newsify B
-ackend API provides the articles for the given query and have the following features:
-- Nesify Backend API support **pagination**, serves the data as and when required by clients.
+Newsify Backend API provides the articles for the given query and have the following features:
+- Newsify Backend API supports **pagination**, serves the data as and when required by clients.
 - Newsify Backend API supports **caching mechanism** as well making data available even when the source APIs fail to deliver the data.
 - Newsify Backend API uses [New York Times](https://developer.nytimes.com/apis) and [The Guardian](https://open-platform.theguardian.com/) as its source APIs.
 
