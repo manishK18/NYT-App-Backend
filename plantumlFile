@@ -1,37 +1,42 @@
 @startuml
 actor Client as client
-participant API_Gateway as apiGateway
-database ValidUsersDB as tokenDB
 participant ArticleAggregatorController as articleAggregatorController
 participant ArticleAggregatorService as articleAggregatorService
 participant NYTApiClientService as nytApiClientService
-participant GuardianApiClientService as guardianApiClientService
 participant NYTPublicAPI as nytApi
+participant GuardianApiClientService as guardianApiClientService
 participant GuardianPublicAPI as guardianApi
+participant CacheDataService as cacheDataService
 database CacheDb as cache
 
 autonumber 1 1
-client --> apiGateway: Token Generation Request
-apiGateway --> tokenDB: Store jwt token for the user
-apiGateway --> client: Send JWT Token
 
-client --> apiGateway: Search for article given "queryData" along with authtoken
+client --> articleAggregatorController : Search for article given "queryData"
 
-alt Authentication successful
-   apiGateway --> articleAggregatorController: Get the article result for the "queryData"
-   articleAggregatorController --> articleAggregatorService: Get the aggregated queryData for "queryData"
-   autonumber stop
-   autonumber 7 0
-   par
-     articleAggregatorService --> nytApiClientService: Get the queryData from NYT for given "queryData"
-     nytApiClientService --> nytApi: Get the queryData from NYTPublicApi for given "queryData"
-     articleAggregatorService --> guardianApiClientService: Get the queryData from GuardianPublicApi
-   end
-autonumber 5 1
-else Authenticaton failure
-   apiGateway --> client: Unauthorized request
-end
+articleAggregatorController --> articleAggregatorService: Get the aggregated articles for "query"
 autonumber stop
 
+par
+articleAggregatorService --> nytApiClientService: 3. Call NYTApiClientService to fetch results from NYT API.
+nytApiClientService --> nytApi: 3.1 Call NYTPublicAPI to fetch results.
+nytApiClientService <-- nytApi: 3.2 Return data to NYTApiClientService.
+articleAggregatorService <-- nytApiClientService: 4. Return fetched results from NYT API to articleAggregatorService.
 
+articleAggregatorService --> guardianApiClientService: 3. Call GuardianApiClientService to fetch results from NYT API.
+guardianApiClientService --> guardianApi: 3.1 Call GuardianPublicAPI to fetch results.
+guardianApiClientService <-- guardianApi: 3.2 Return data to GuardianApiClientService.
+articleAggregatorService <-- guardianApiClientService: 4. Return fetched results from Guardian API to articleAggregatorService.
+
+end
+alt Recieved articles from Source APIs
+articleAggregatorService --> cacheDataService: 5. Save aggregated results in cache
+cacheDataService --> cache: 6. Write data into cache Database
+
+else No articles recieved from Source APIs
+articleAggregatorService --> cacheDataService: 5. Retreive articles from cache for given query
+cacheDataService <-- cache: 6. Read data from cache Database
+end
+
+articleAggregatorController <-- articleAggregatorService: Return the Response to controller
+client <-- articleAggregatorController: Return the Response to client with appropritate HTTP status code
 @enduml
