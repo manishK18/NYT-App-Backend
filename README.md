@@ -1,5 +1,10 @@
 <h1 align="center">Newsify Backend 🦉 </h1>
 
+## LINKS
+### Swagger API Doc: http://13.50.134.52:8081/docs/api-docs.html
+### Jenkins: http://13.50.134.52:8080/
+*NOTE: These may not be accessible if my instance is in stopped state
+
 ## About
 Newsify B
 ackend API provides the articles for the given query and have the following features:
