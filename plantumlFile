@@ -37,6 +37,6 @@ articleAggregatorService --> cacheDataService: 5. Retreive articles from cache f
 cacheDataService <-- cache: 6. Read data from cache Database
 end
 
-articleAggregatorController <-- articleAggregatorService: Return the Response to controller
-client <-- articleAggregatorController: Return the Response to client with appropritate HTTP status code
+articleAggregatorController <-- articleAggregatorService: 7. Return the Response to controller
+client <-- articleAggregatorController: 8. Return the Response to client with appropritate HTTP status code
 @enduml
