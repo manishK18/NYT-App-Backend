@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   database:
+    restart: always
     build: ./postgres/
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -15,6 +16,7 @@ services:
       - newsappnetwork
 
   newsaggregator:
+    restart: always
     build: ./
     ports:
       - "8081:8080"
