@@ -1,5 +1,5 @@
 # Use the official openjdk image from Docker Hub
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17
 
 ENV artifactId=NewsAggregator
 

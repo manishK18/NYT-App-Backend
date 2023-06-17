@@ -1,33 +1,50 @@
 version: "3.8"
 
+#Creating the services
 services:
+  #Creating the database service
   database:
+    #Defining it to restart always i.e. will boot up automatically on EC2 machine reboot when docker is booted up
     restart: always
+    #Defining where to search for the Dockerfile to build this service
     build: ./postgres/
+    #Defining the environment variables to be used by docker container and app running into it
+    #These will be inject from external file during the docker-compose up process
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    #Defining the ports to be exposed <DOCKER_PORT>:<APP_PORT>
     ports:
       - "5432:5432"
+    #Defining the volume location to be used by the postgres to save its data and read
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    #Defining the network to be used by this service to talk to other fellow containers
     networks:
       - newsappnetwork
-
+  #Creating the news aggregator service
   newsaggregator:
+    #Defining it to restart always i.e. will boot up automatically on EC2 machine reboot when docker is booted up
     restart: always
+    #Defining where to search for the Dockerfile to build this service
     build: ./
+    #Defining the ports to be exposed <DOCKER_PORT>:<APP_PORT>
     ports:
       - "8081:8080"
+    #Defining the container or service this service depends on so that docker know the service that it must start
+    #before starting this service
     depends_on:
       - database
+    #Defining the environment variables to be used by docker container and app running into it
+    #These will be inject from external file during the docker-compose up process
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       NYT_API_KEY: ${NYT_API_KEY}
       GUARDIAN_API_KEY: ${GUARDIAN_API_KEY}
+    #Defining the network to be used by this service to talk to other fellow containers
     networks:
       - newsappnetwork
 
